@@ -7,7 +7,9 @@ import { teamsAPI } from '../../services/api';
 import { TEAM_MEMBER_ROLES, VALIDATION_RULES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
-// Team Create/Edit Modal component - Handles team creation and editing with member management
+/**
+ * Team Create/Edit Modal component
+ */
 const TeamModal = ({ isOpen, onClose, team = null, mode = 'create' }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
@@ -38,7 +40,7 @@ const TeamModal = ({ isOpen, onClose, team = null, mode = 'create' }) => {
     name: 'members'
   });
 
-  // Create/Update team mutation - Handles the creation and updating of teams
+  // Create/Update team mutation
   const teamMutation = useMutation(
     (data) => {
       if (mode === 'create') {

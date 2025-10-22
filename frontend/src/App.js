@@ -7,6 +7,25 @@ import { Toaster } from 'react-hot-toast';
 import Login from './components/auth/Login';
 import MainLayout from './components/common/MainLayout';
 import ProtectedRoute, { AdminRoute, JudgeRoute } from './components/auth/ProtectedRoute';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import NotFound from './components/common/NotFound';
+
+// Admin Components
+import AdminDashboard from './components/admin/Dashboard';
+import TeamManagement from './components/admin/TeamManagement';
+import CriteriaManagement from './components/admin/CriteriaManagement';
+import UserManagement from './components/admin/UserManagement';
+import RoundManagement from './components/admin/RoundManagement';
+import JudgeAssignment from './components/admin/JudgeAssignment';
+
+// Judge Components
+import JudgeDashboard from './components/judge/JudgeDashboard';
+import TeamScoring from './components/judge/TeamScoring';
+import ScoreHistory from './components/judge/ScoreHistory';
+
+// Results Components
+import WinnerDisplay from './components/results/WinnerDisplay';
+import Analytics from './components/results/Analytics';
 
 // Import styles
 import './styles/globals.css';
@@ -27,9 +46,10 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="App">
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <div className="App">
           {/* Toast notifications - Displays success and error messages */}
           <Toaster
             position="top-right"
@@ -66,22 +86,22 @@ function App() {
               
               {/* Admin routes */}
               <Route path="/admin/*" element={<AdminRoute />}>
-                <Route path="dashboard" element={<div>Admin Dashboard</div>} />
-                <Route path="teams" element={<div>Teams Management</div>} />
-                <Route path="criteria" element={<div>Criteria Management</div>} />
-                <Route path="rounds" element={<div>Rounds Management</div>} />
-                <Route path="assignment" element={<div>Judge Assignment</div>} />
-                <Route path="users" element={<div>Users Management</div>} />
-                <Route path="results" element={<div>Results</div>} />
-                <Route path="analytics" element={<div>Analytics</div>} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="teams" element={<TeamManagement />} />
+                <Route path="criteria" element={<CriteriaManagement />} />
+                <Route path="rounds" element={<RoundManagement />} />
+                <Route path="assignment" element={<JudgeAssignment />} />
+                <Route path="users" element={<UserManagement />} />
+                <Route path="results" element={<WinnerDisplay />} />
+                <Route path="analytics" element={<Analytics />} />
               </Route>
               
               {/* Judge routes */}
               <Route path="/judge/*" element={<JudgeRoute />}>
-                <Route path="dashboard" element={<div>Judge Dashboard</div>} />
-                <Route path="teams" element={<div>My Teams</div>} />
-                <Route path="scoring" element={<div>Score Teams</div>} />
-                <Route path="history" element={<div>Score History</div>} />
+                <Route path="dashboard" element={<JudgeDashboard />} />
+                <Route path="teams" element={<JudgeDashboard />} />
+                <Route path="scoring" element={<TeamScoring />} />
+                <Route path="history" element={<ScoreHistory />} />
               </Route>
               
               {/* Common routes */}
@@ -93,12 +113,13 @@ function App() {
               <Route path="/settings" element={<div>Settings</div>} />
             </Route>
             
-            {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            {/* 404 Route */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </div>
-      </Router>
-    </QueryClientProvider>
+          </div>
+        </Router>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
