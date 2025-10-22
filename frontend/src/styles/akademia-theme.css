@@ -1,0 +1,262 @@
+/* Akademia Brand Colors and Components */
+
+/* Header Styles */
+.akademia-header {
+    background: linear-gradient(135deg, var(--akademia-primary) 0%, #1a2a4a 100%);
+    color: var(--akademia-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .akademia-header .logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--akademia-white);
+  }
+  
+  /* Navigation Styles */
+  .akademia-nav {
+    background: var(--akademia-white);
+    border-bottom: 3px solid var(--akademia-secondary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .akademia-nav-item {
+    @apply px-4 py-2 text-akademia-primary font-medium hover:bg-akademia-light hover:text-akademia-secondary transition-colors duration-200 rounded-md;
+  }
+  
+  .akademia-nav-item.active {
+    @apply bg-akademia-secondary text-white;
+  }
+  
+  /* Sidebar Styles */
+  .akademia-sidebar {
+    background: var(--akademia-white);
+    border-right: 1px solid #e5e7eb;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .akademia-sidebar-item {
+    @apply flex items-center px-4 py-3 text-gray-700 hover:bg-akademia-light hover:text-akademia-primary transition-colors duration-200;
+  }
+  
+  .akademia-sidebar-item.active {
+    @apply bg-akademia-primary text-white;
+  }
+  
+  .akademia-sidebar-item.active:hover {
+    @apply bg-akademia-primary text-white;
+  }
+  
+  /* Dashboard Cards */
+  .akademia-card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden;
+  }
+  
+  .akademia-card-header {
+    @apply bg-gradient-to-r from-akademia-primary to-akademia-secondary text-white px-6 py-4;
+  }
+  
+  .akademia-card-title {
+    @apply text-lg font-semibold text-white;
+  }
+  
+  .akademia-card-body {
+    @apply p-6;
+  }
+  
+  /* Statistics Cards */
+  .stat-card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200;
+  }
+  
+  .stat-card-icon {
+    @apply w-12 h-12 rounded-lg flex items-center justify-center text-white;
+  }
+  
+  .stat-card-icon.primary {
+    @apply bg-akademia-primary;
+  }
+  
+  .stat-card-icon.secondary {
+    @apply bg-akademia-secondary;
+  }
+  
+  .stat-card-icon.success {
+    @apply bg-green-500;
+  }
+  
+  .stat-card-icon.warning {
+    @apply bg-yellow-500;
+  }
+  
+  .stat-card-icon.danger {
+    @apply bg-red-500;
+  }
+  
+  .stat-card-value {
+    @apply text-2xl font-bold text-akademia-primary mt-2;
+  }
+  
+  .stat-card-label {
+    @apply text-sm text-gray-600 mt-1;
+  }
+  
+  /* Table Styles */
+  .akademia-table {
+    @apply w-full bg-white rounded-lg shadow-md overflow-hidden;
+  }
+  
+  .akademia-table th {
+    @apply bg-akademia-primary text-white px-6 py-3 text-left text-sm font-medium;
+  }
+  
+  .akademia-table td {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200;
+  }
+  
+  .akademia-table tbody tr:hover {
+    @apply bg-akademia-light;
+  }
+  
+  /* Form Styles */
+  .akademia-form {
+    @apply space-y-6;
+  }
+  
+  .akademia-form-group {
+    @apply space-y-2;
+  }
+  
+  .akademia-form-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  
+  .akademia-form-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-akademia-primary focus:border-transparent transition-colors duration-200;
+  }
+  
+  .akademia-form-textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-akademia-primary focus:border-transparent transition-colors duration-200 resize-vertical;
+  }
+  
+  .akademia-form-select {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-akademia-primary focus:border-transparent transition-colors duration-200;
+  }
+  
+  /* Button Variants */
+  .akademia-btn {
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+  }
+  
+  .akademia-btn-primary {
+    @apply akademia-btn bg-akademia-primary text-white hover:bg-opacity-90 focus:ring-akademia-primary;
+  }
+  
+  .akademia-btn-secondary {
+    @apply akademia-btn bg-akademia-secondary text-white hover:bg-opacity-90 focus:ring-akademia-secondary;
+  }
+  
+  .akademia-btn-outline {
+    @apply akademia-btn border-akademia-primary text-akademia-primary hover:bg-akademia-primary hover:text-white focus:ring-akademia-primary;
+  }
+  
+  .akademia-btn-danger {
+    @apply akademia-btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  }
+  
+  .akademia-btn-success {
+    @apply akademia-btn bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
+  }
+  
+  /* Badge Styles */
+  .akademia-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .akademia-badge-primary {
+    @apply akademia-badge bg-akademia-primary text-white;
+  }
+  
+  .akademia-badge-secondary {
+    @apply akademia-badge bg-akademia-secondary text-white;
+  }
+  
+  .akademia-badge-success {
+    @apply akademia-badge bg-green-100 text-green-800;
+  }
+  
+  .akademia-badge-warning {
+    @apply akademia-badge bg-yellow-100 text-yellow-800;
+  }
+  
+  .akademia-badge-danger {
+    @apply akademia-badge bg-red-100 text-red-800;
+  }
+  
+  /* Alert Styles */
+  .akademia-alert {
+    @apply p-4 rounded-lg border;
+  }
+  
+  .akademia-alert-success {
+    @apply akademia-alert bg-green-50 border-green-200 text-green-800;
+  }
+  
+  .akademia-alert-warning {
+    @apply akademia-alert bg-yellow-50 border-yellow-200 text-yellow-800;
+  }
+  
+  .akademia-alert-danger {
+    @apply akademia-alert bg-red-50 border-red-200 text-red-800;
+  }
+  
+  .akademia-alert-info {
+    @apply akademia-alert bg-blue-50 border-blue-200 text-blue-800;
+  }
+  
+  /* Loading States */
+  .akademia-loading {
+    @apply flex items-center justify-center p-8;
+  }
+  
+  .akademia-spinner {
+    @apply animate-spin rounded-full border-4 border-gray-300 border-t-akademia-primary;
+  }
+  
+  /* Empty States */
+  .akademia-empty {
+    @apply text-center py-12;
+  }
+  
+  .akademia-empty-icon {
+    @apply w-16 h-16 mx-auto text-gray-400 mb-4;
+  }
+  
+  .akademia-empty-title {
+    @apply text-lg font-medium text-gray-900 mb-2;
+  }
+  
+  .akademia-empty-description {
+    @apply text-gray-500;
+  }
+  
+  /* Responsive Grid */
+  .akademia-grid {
+    @apply grid gap-6;
+  }
+  
+  .akademia-grid-1 {
+    @apply akademia-grid grid-cols-1;
+  }
+  
+  .akademia-grid-2 {
+    @apply akademia-grid grid-cols-1 md:grid-cols-2;
+  }
+  
+  .akademia-grid-3 {
+    @apply akademia-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  .akademia-grid-4 {
+    @apply akademia-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
+  }
