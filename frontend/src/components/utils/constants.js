@@ -1,6 +1,4 @@
-/**
- * Application constants and configuration
- */
+// Application constants and configuration
 
 // User roles
 export const USER_ROLES = {
