@@ -1,16 +1,9 @@
 import { format, parseISO, isValid } from 'date-fns';
 import { clsx } from 'clsx';
 
-/**
- * Utility functions for common operations
- */
+// Utility functions for common operations
 
-/**
- * Format date for display
- * @param {string|Date} date - Date to format
- * @param {string} formatStr - Format string (default: 'MMM dd, yyyy')
- * @returns {string} - Formatted date
- */
+// Format date for display
 export const formatDate = (date, formatStr = 'MMM dd, yyyy') => {
   if (!date) return '';
   
@@ -23,57 +16,40 @@ export const formatDate = (date, formatStr = 'MMM dd, yyyy') => {
   }
 };
 
-/**
- * Format date with time for display
- * @param {string|Date} date - Date to format
- * @returns {string} - Formatted date with time
- */
+
+// Format date with time for display
 export const formatDateTime = (date) => {
   return formatDate(date, 'MMM dd, yyyy HH:mm');
 };
 
-/**
- * Format date for API
- * @param {string|Date} date - Date to format
- * @returns {string} - Formatted date for API
- */
+
+// Format date for API
 export const formatDateForAPI = (date) => {
   return formatDate(date, 'yyyy-MM-dd');
 };
 
-/**
- * Format datetime for API
- * @param {string|Date} date - Date to format
- * @returns {string} - Formatted datetime for API
- */
+
+//Format datetime for API
 export const formatDateTimeForAPI = (date) => {
   return formatDate(date, 'yyyy-MM-dd HH:mm:ss');
 };
 
-/**
- * Combine class names using clsx
- * @param {...any} classes - Class names to combine
- * @returns {string} - Combined class names
- */
+
+// Combine class names using clsx
+
 export const cn = (...classes) => {
   return clsx(classes);
 };
 
-/**
- * Capitalize first letter of string
- * @param {string} str - String to capitalize
- * @returns {string} - Capitalized string
- */
+
+// Capitalize first letter of string
 export const capitalize = (str) => {
   if (!str || typeof str !== 'string') return '';
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-/**
- * Capitalize all words in string
- * @param {string} str - String to capitalize
- * @returns {string} - Title case string
- */
+
+//Capitalize all words in string
 export const titleCase = (str) => {
   if (!str || typeof str !== 'string') return '';
   return str.replace(/\w\S*/g, (txt) => 
@@ -81,11 +57,9 @@ export const titleCase = (str) => {
   );
 };
 
-/**
- * Generate initials from name
- * @param {string} name - Name to generate initials from
- * @returns {string} - Initials
- */
+
+
+//Generate initials from name
 export const getInitials = (name) => {
   if (!name || typeof name !== 'string') return 'U';
   
@@ -97,45 +71,30 @@ export const getInitials = (name) => {
     .slice(0, 2);
 };
 
-/**
- * Truncate text to specified length
- * @param {string} text - Text to truncate
- * @param {number} length - Maximum length
- * @param {string} suffix - Suffix to add (default: '...')
- * @returns {string} - Truncated text
- */
+
+//Truncate text to specified length
 export const truncateText = (text, length, suffix = '...') => {
   if (!text || typeof text !== 'string') return '';
   if (text.length <= length) return text;
   return text.substring(0, length) + suffix;
 };
 
-/**
- * Format number with commas
- * @param {number} num - Number to format
- * @returns {string} - Formatted number
- */
+
+//Format number with commas
 export const formatNumber = (num) => {
   if (typeof num !== 'number') return '0';
   return num.toLocaleString();
 };
 
-/**
- * Format percentage
- * @param {number} num - Number to format as percentage
- * @param {number} decimals - Number of decimal places (default: 1)
- * @returns {string} - Formatted percentage
- */
+
+// Format percentage
 export const formatPercentage = (num, decimals = 1) => {
   if (typeof num !== 'number') return '0%';
   return `${(num * 100).toFixed(decimals)}%`;
 };
 
-/**
- * Generate random ID
- * @param {number} length - Length of ID (default: 8)
- * @returns {string} - Random ID
- */
+
+//Generate random ID
 export const generateId = (length = 8) => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -145,12 +104,8 @@ export const generateId = (length = 8) => {
   return result;
 };
 
-/**
- * Debounce function
- * @param {Function} func - Function to debounce
- * @param {number} wait - Wait time in milliseconds
- * @returns {Function} - Debounced function
- */
+
+//Debounce function
 export const debounce = (func, wait) => {
   let timeout;
   return function executedFunction(...args) {
@@ -163,12 +118,8 @@ export const debounce = (func, wait) => {
   };
 };
 
-/**
- * Throttle function
- * @param {Function} func - Function to throttle
- * @param {number} limit - Time limit in milliseconds
- * @returns {Function} - Throttled function
- */
+
+// Throttle function
 export const throttle = (func, limit) => {
   let inThrottle;
   return function executedFunction(...args) {
@@ -180,11 +131,8 @@ export const throttle = (func, limit) => {
   };
 };
 
-/**
- * Deep clone object
- * @param {any} obj - Object to clone
- * @returns {any} - Cloned object
- */
+
+//Deep clone object
 export const deepClone = (obj) => {
   if (obj === null || typeof obj !== 'object') return obj;
   if (obj instanceof Date) return new Date(obj.getTime());
@@ -201,11 +149,8 @@ export const deepClone = (obj) => {
   return obj;
 };
 
-/**
- * Check if value is empty
- * @param {any} value - Value to check
- * @returns {boolean} - True if empty
- */
+
+// Check if value is empty
 export const isEmpty = (value) => {
   if (value === null || value === undefined) return true;
   if (typeof value === 'string') return value.trim() === '';
@@ -214,41 +159,29 @@ export const isEmpty = (value) => {
   return false;
 };
 
-/**
- * Validate email format
- * @param {string} email - Email to validate
- * @returns {boolean} - True if valid email
- */
+
+// Validate email format
 export const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-/**
- * Validate student number format (8 digits)
- * @param {string} studentNumber - Student number to validate
- * @returns {boolean} - True if valid student number
- */
+
+// Validate student number format (8 digits)
 export const isValidStudentNumber = (studentNumber) => {
   const studentNumberRegex = /^\d{8}$/;
   return studentNumberRegex.test(studentNumber);
 };
 
-/**
- * Get file extension from filename
- * @param {string} filename - Filename
- * @returns {string} - File extension
- */
+
+// Get file extension from filename
 export const getFileExtension = (filename) => {
   if (!filename || typeof filename !== 'string') return '';
   return filename.split('.').pop().toLowerCase();
 };
 
-/**
- * Format file size in human readable format
- * @param {number} bytes - File size in bytes
- * @returns {string} - Formatted file size
- */
+
+// Format file size in human readable format
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes';
   
@@ -259,22 +192,14 @@ export const formatFileSize = (bytes) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
-/**
- * Sleep for specified milliseconds
- * @param {number} ms - Milliseconds to sleep
- * @returns {Promise} - Promise that resolves after sleep
- */
+
+// Sleep for specified milliseconds
 export const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-/**
- * Retry function with exponential backoff
- * @param {Function} fn - Function to retry
- * @param {number} retries - Number of retries (default: 3)
- * @param {number} delay - Initial delay in milliseconds (default: 1000)
- * @returns {Promise} - Promise that resolves with function result
- */
+
+// Retry function with exponential backoff
 export const retry = async (fn, retries = 3, delay = 1000) => {
   try {
     return await fn();
