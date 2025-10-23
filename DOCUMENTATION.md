@@ -1,6 +1,6 @@
 # Student Project Marking WebApp - Technical Documentation
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Project Overview](#project-overview)
 2. [Architecture & Design Patterns](#architecture--design-patterns)
@@ -19,7 +19,7 @@
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 The **Student Project Marking WebApp** is a full-stack web application designed for Akademia's Computer Science Capstone project evaluation system. It facilitates the industry project day where external judges evaluate student teams' projects based on predefined criteria.
 
@@ -38,7 +38,7 @@ The **Student Project Marking WebApp** is a full-stack web application designed 
 
 ---
 
-## 🏗️ Architecture & Design Patterns
+## Architecture & Design Patterns
 
 ### System Architecture
 
@@ -219,7 +219,7 @@ GET    /api/scores/round/:roundId     # Get round scores
 
 ---
 
-## 🗄️ Database Design
+## Database Design
 
 ### MongoDB Collections
 
@@ -439,7 +439,7 @@ router.get('/scores/my-scores', authenticate, authorize('judge'), getMyScores);
 
 ---
 
-## ⚛️ Frontend Architecture
+## Frontend Architecture
 
 ### Component Hierarchy
 
@@ -775,7 +775,7 @@ app.use(helmet({
 
 ---
 
-## ⚠️ Error Handling
+## Error Handling
 
 ### Backend Error Handling
 
@@ -884,7 +884,7 @@ api.interceptors.response.use(
 
 ---
 
-## 🚀 Performance Optimizations
+## Performance Optimizations
 
 ### 1. Database Optimizations
 
@@ -1399,7 +1399,7 @@ volumes:
 
 ---
 
-## 📊 Code Quality & Standards
+## Code Quality & Standards
 
 ### 1. Code Organization
 
@@ -1525,7 +1525,7 @@ const stats = await Team.aggregate([
 
 ---
 
-## 🎯 Conclusion
+## Conclusion
 
 The **Student Project Marking WebApp** represents a comprehensive full-stack solution that demonstrates:
 
@@ -1554,4 +1554,4 @@ This project showcases the skills and knowledge expected of a third-year Compute
 
 ---
 
-**Built with ❤️ for Akademia's Computer Science Program**
+**Built with dedication for Akademia's Computer Science Program**

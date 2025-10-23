@@ -1,6 +1,6 @@
 # Deployment Guide - Student Project Marking WebApp
 
-## 🚀 Production Deployment
+## Production Deployment
 
 ### Prerequisites
 - GitHub repository with your code
@@ -338,4 +338,4 @@ app.use(helmet({
 
 ---
 
-**Your application is now live and ready for production use! 🎉**
+**Your application is now live and ready for production use!**

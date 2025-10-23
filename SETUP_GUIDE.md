@@ -1,6 +1,6 @@
 # Student Project Marking WebApp - Setup Guide
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Node.js** (v16 or higher)
@@ -172,7 +172,7 @@
 3. **Click "Assign Judges"** to automatically distribute teams
 4. **Review Assignments** and optimize if needed
 
-## 📊 Usage Guide
+## Usage Guide
 
 ### For Administrators
 
@@ -192,7 +192,7 @@
 3. **Scoring**: Score teams based on criteria
 4. **History**: View scoring history and statistics
 
-## 🚀 Deployment
+## Deployment
 
 ### Netlify Deployment (Frontend)
 
@@ -218,7 +218,7 @@
 2. **Update Frontend API URL**:
    - Change `VITE_API_URL` to production backend URL
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -284,9 +284,9 @@ Student_Project_Marking_WebApp/
 └── README.md              # Project documentation
 ```
 
-## 🎯 Features Implemented
+## Features Implemented
 
-### ✅ Core Functionality
+### Core Functionality
 - [x] User authentication (Admin/Judge roles)
 - [x] Team management (CRUD operations)
 - [x] Criteria management with marking guides
@@ -296,7 +296,7 @@ Student_Project_Marking_WebApp/
 - [x] Results display and winner calculation
 - [x] Analytics dashboard
 
-### ✅ Technical Features
+### Technical Features
 - [x] RESTful API architecture
 - [x] JWT authentication
 - [x] Password encryption
@@ -306,7 +306,7 @@ Student_Project_Marking_WebApp/
 - [x] Docker containerization
 - [x] MongoDB integration
 
-### ✅ UI/UX Features
+### UI/UX Features
 - [x] Akademia color scheme
 - [x] Modern, polished interface
 - [x] User-friendly navigation
@@ -323,4 +323,4 @@ For technical support or questions:
 
 ---
 
-**Happy Coding! 🚀**
+**Happy Coding!**
