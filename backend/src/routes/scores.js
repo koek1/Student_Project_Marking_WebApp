@@ -462,6 +462,12 @@ router.get('/my-scores', authenticate, requireJudge, async (req, res) => {
       const teamScores = {};
       
       scores.forEach(score => {
+        // Skip scores with null references
+        if (!score.team || !score.round || !score.criteria) {
+          console.log('Skipping score with null reference:', score);
+          return;
+        }
+        
         const teamId = score.team._id.toString();
         const roundId = score.round._id.toString();
         const criteriaId = score.criteria._id.toString();

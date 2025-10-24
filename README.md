@@ -1,308 +1,191 @@
 # Student Project Marking WebApp
 
-A comprehensive full-stack web application designed for Akademia's Computer Science Capstone project evaluation system. This application facilitates the industry project day where external judges evaluate student teams' projects based on predefined criteria.
+A comprehensive web application for managing student project competitions. This application allows administrators to manage teams, judges, rounds, and scoring criteria, while providing judges with an interface to score projects.
 
-## Quick Start
+## 🚀 Quick Start
 
-### Option 1: Docker (Recommended)
+### Prerequisites
+- Docker (Download from: https://docs.docker.com/get-docker/)
+- Docker Compose (Usually included with Docker Desktop)
 
-**Prerequisites**: Docker and Docker Compose
-
+### One-Command Setup
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd Student_Project_Marking_WebApp
-
-# Start all services with Docker
-docker-compose up -d
-
-# Access the application
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:5000
+# Make the setup script executable and run it
+chmod +x setup.sh
+./setup.sh
 ```
 
-### Option 2: Local Development
-
-**Prerequisites**: Node.js (v16+), MongoDB (v4.4+)
-
+### Manual Setup
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd Student_Project_Marking_WebApp
-
-# Install dependencies
-npm install
-cd backend && npm install
-cd ../frontend && npm install
-
-# Set up environment variables
-cp .env.example .env
-# Update .env with your MongoDB connection string
-
 # Start the application
-# Terminal 1: Backend
-cd backend && npm run dev
+docker-compose up -d
 
-# Terminal 2: Frontend  
-cd frontend && npm run dev
+# Create admin user
+cd backend
+node init-docker-admin.js
 ```
 
 ### Access the Application
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
-- **Health Check**: http://localhost:5000/health
+- **Login**: admin / admin123
 
-## Docker Commands
+## 🔐 Default Login Credentials
 
-### Start Services
+### Admin Account
+- **Username**: `admin`
+- **Password**: `admin123`
+
+## 📱 How to Use the Application
+
+### For Administrators
+
+#### 1. Managing Teams
+- **Navigate to**: "Bestuur Spanne" (Manage Teams)
+- **Add Teams**: Click "Voeg Nuwe Span By" (Add New Team)
+- **Fill in details**:
+  - Team Name (e.g., "Team Alpha")
+  - Team Number (1-15)
+  - Project Title
+  - Project Description
+  - Team Members (3-4 members, one per line)
+- **Save**: Click "Create Team"
+
+#### 2. Managing Judges
+- **Navigate to**: "Bestuur Beoordelaars" (Manage Judges)
+- **Add Judges**: Click "Voeg Nuwe Beoordelaar By" (Add New Judge)
+- **Fill in details**:
+  - Username
+  - Password
+  - Full Name
+  - Email
+  - Specialization/Position
+- **Save**: Click "Create Judge"
+
+#### 3. Setting Up Criteria
+- **Navigate to**: "Bestuur Kriteria" (Manage Criteria)
+- **Add Criteria**: Click "+ Add Criteria"
+- **Fill in details**:
+  - Criteria Name (e.g., "User Interface Design")
+  - Description
+  - Maximum Score (e.g., 100)
+- **Save**: Click "Create Criteria"
+
+#### 4. Creating Rounds
+- **Navigate to**: "Bestuur Rondes" (Manage Rounds)
+- **Add Round**: Click "Create New Round"
+- **Fill in details**:
+  - Round Name (e.g., "Preliminary Round")
+  - Round Type (Preliminary/Semi-Final/Final)
+  - Description
+  - Select Criteria (choose from existing criteria)
+- **Save**: Click "Create Round"
+
+#### 5. Assigning Judges to Teams
+- **Navigate to**: "Bestuur Toewysings" (Manage Assignments)
+- **Assign Judges**: 
+  - Select teams and judges
+  - Use "Auto Assign" for automatic assignment
+  - Or manually assign judges to teams
+- **Save**: Assignments are saved automatically
+
+### For Judges
+
+#### 1. Viewing Assigned Teams
+- **Login** with judge credentials
+- **Navigate to**: "My Spanne" (My Teams) tab
+- **View teams** assigned to you
+- **See project details** and team members
+
+#### 2. Scoring Teams
+- **Click** "Start Scoring" for any team
+- **Select criteria** to score on
+- **Enter scores** (0-100 for each criteria)
+- **Add comments** if needed
+- **Submit scores** when complete
+
+#### 3. Viewing Results
+- **Navigate to**: "Punte Geskiedenis" (Score History) tab
+- **View past scores** you've submitted
+- **Edit scores** if needed
+
+#### 4. Checking Leaderboard
+- **Navigate to**: "Ranglys" (Leaderboard) tab
+- **View team rankings** based on scores
+- **See team performance** across rounds
+
+## 🎯 Key Features
+
+### Admin Dashboard
+- **Team Management**: Create and manage student teams
+- **Judge Management**: Add and manage competition judges
+- **Round Management**: Organize competition rounds
+- **Criteria Management**: Define scoring criteria
+- **Assignment System**: Assign judges to teams
+- **Statistics**: View real-time statistics
+
+### Judge Dashboard
+- **Team Overview**: View assigned teams and projects
+- **Scoring Interface**: Score teams based on criteria
+- **History Tracking**: View scoring history
+- **Leaderboard**: See team rankings and performance
+
+## 🔧 Troubleshooting
+
+### If the application won't start:
 ```bash
-# Start all services in background
-docker-compose up -d
+# Check if ports are in use
+netstat -tulpn | grep :3000
+netstat -tulpn | grep :5000
 
-# Start with logs
-docker-compose up
-
-# Rebuild and start
-docker-compose up --build
-```
-
-### Manage Services
-```bash
-# View running containers
-docker-compose ps
-
-# View logs
-docker-compose logs -f
-
-# Stop all services
+# Stop and restart
 docker-compose down
-
-# Stop and remove volumes
-docker-compose down -v
-```
-
-### Test Setup
-```bash
-# Test if everything is running
-node test-docker.js
-```
-
-## Environment Configuration
-
-### Backend (.env)
-```env
-MONGODB_URI=mongodb://localhost:27017/student-marking-app
-JWT_SECRET=your-super-secret-jwt-key-here
-JWT_EXPIRE=7d
-PORT=5000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:3000
-```
-
-### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:5000
-```
-
-## Development Commands
-
-### Backend
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Docker Development
-```bash
-# Start with Docker
 docker-compose up -d
-
-# View logs
-docker-compose logs -f backend
-docker-compose logs -f frontend
-
-# Rebuild specific service
-docker-compose build backend
-docker-compose up backend
 ```
 
-## Testing
-
-### Test Credentials
-- **Username**: admin
-- **Password**: admin123
-
-### Health Checks
-- **Backend**: http://localhost:5000/health
-- **Frontend**: http://localhost:3000
-- **MongoDB**: Check with `docker-compose logs mongodb`
-
-## Troubleshooting
-
-### Common Issues
-1. **Port already in use**: Kill processes using ports 3000, 5000, 27017
-2. **Docker containers won't start**: Check `docker-compose logs`
-3. **Database connection issues**: Verify MongoDB is running
-4. **Frontend build errors**: Clear node_modules and reinstall
-
-### Debug Commands
+### If you can't login:
 ```bash
-# Check Docker status
-docker-compose ps
-
-# View container logs
-docker-compose logs -f
-
-# Enter container shell
-docker-compose exec backend sh
-docker-compose exec frontend sh
-
-# Check network connectivity
-docker-compose exec backend ping mongodb
+# Recreate admin user
+cd backend
+node init-docker-admin.js
 ```
 
-## Project Structure
+### If you need to reset everything:
+```bash
+# Stop and remove all data
+docker-compose down -v
 
-```
-Student_Project_Marking_WebApp/
-├── backend/                 # Express.js backend
-│   ├── src/
-│   │   ├── models/         # Database models (User, Team, Criteria, Round, Score)
-│   │   ├── routes/         # API routes (auth, teams, criteria, rounds, scores)
-│   │   ├── middleware/     # Custom middleware (auth, errorHandler, validation)
-│   │   ├── config/         # Database configuration
-│   │   ├── app.js          # Main application
-│   │   └── server.js       # Server entry point
-│   ├── Dockerfile          # Backend container configuration
-│   └── package.json
-├── frontend/               # React.js frontend
-│   ├── src/
-│   │   ├── App.jsx         # Main React application
-│   │   ├── index.jsx       # React entry point
-│   │   ├── styles/         # CSS styles
-│   │   └── images/         # Static assets
-│   ├── public/
-│   │   └── index.html      # HTML template
-│   ├── index.html          # Vite development template
-│   ├── Dockerfile          # Frontend container configuration
-│   ├── nginx.conf          # Nginx configuration
-│   ├── package.json
-│   └── vite.config.js
-├── docker-compose.yml      # Docker Compose configuration
-├── package.json            # Root package.json
-├── test-docker.js         # Docker setup test script
-├── DOCUMENTATION.md        # Technical documentation
-└── README.md              # This file
+# Start fresh
+docker-compose up -d
+cd backend && node init-docker-admin.js
 ```
 
-## Features
+## 📊 Application Workflow
 
-### Core Functionality
-- **User Authentication**: Role-based access (Admin/Judge)
-- **Team Management**: CRUD operations for student teams
-- **Criteria Management**: Create and manage evaluation criteria
-- **Round Management**: Set up evaluation rounds and scheduling
-- **Judge Assignment**: Automated algorithm for fair team distribution
-- **Scoring System**: Comprehensive scoring with validation
-- **Results & Analytics**: Real-time results and performance metrics
+1. **Admin creates teams** with project details
+2. **Admin adds judges** with credentials
+3. **Admin defines criteria** for scoring
+4. **Admin creates rounds** and selects criteria
+5. **Admin assigns judges** to teams
+6. **Judges score teams** based on criteria
+7. **System calculates rankings** and displays leaderboard
 
-### Technical Features
-- **RESTful API**: Well-structured backend with Express.js
-- **JWT Authentication**: Secure token-based authentication
-- **MongoDB Integration**: NoSQL database with Mongoose ODM
-- **React Frontend**: Modern UI with React Router and React Query
-- **Responsive Design**: Mobile-friendly interface
-- **Input Validation**: Comprehensive client and server-side validation
-- **Error Handling**: Robust error boundaries and validation
+## 🎨 Interface Language
 
-### UI/UX Features
-- **Akademia Theme**: Custom color scheme and branding
-- **Modern Interface**: Clean, professional design
-- **Role-based Navigation**: Different interfaces for admins and judges
-- **Real-time Updates**: Live data synchronization
-- **Loading States**: User-friendly feedback and loading indicators
+The application interface is in **Afrikaans** with the following key terms:
+- **Spanne** = Teams
+- **Beoordelaars** = Judges
+- **Rondes** = Rounds
+- **Kriteria** = Criteria
+- **Toewysings** = Assignments
+- **Ranglys** = Leaderboard
+- **Punte** = Scores
 
-## Technology Stack
+## 📞 Need Help?
 
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM for MongoDB
-- **JWT** - Authentication
-- **Bcrypt** - Password hashing
-- **Express Validator** - Input validation
-
-### Frontend
-- **React** - UI library
-- **React Router** - Client-side routing
-- **React Query** - Data fetching and caching
-- **React Hook Form** - Form management
-- **Axios** - HTTP client
-- **Vite** - Build tool
-
-### Development Tools
-- **Nodemon** - Development server
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-
-## Documentation
-
-- **[Technical Documentation](DOCUMENTATION.md)** - Comprehensive technical details
-
-## Recent Optimizations (2025)
-
-The codebase has been optimized by removing unused files while preserving all core functionality:
-
-### Files Removed (8 total):
-- **Admin Creation Scripts (5 files)**: One-time setup utilities
-- **Test/Utility Scripts (3 files)**: Development utilities
-
-### Benefits:
-- **Reduced Complexity**: Cleaner project structure
-- **Improved Maintainability**: Fewer files to manage
-- **Better Performance**: Smaller codebase for faster builds
-- **Enhanced Security**: Removed potential security risks
-- **Professional Appearance**: Production-ready codebase
-
-## 🚀 Deployment
-
-### Quick Deploy
-1. **Backend**: Deploy to Railway/Heroku
-2. **Frontend**: Deploy to Netlify/Vercel
-3. **Database**: Use MongoDB Atlas
-
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is developed for Akademia's Computer Science Program.
-
-## 🆘 Support
-
-For technical support or questions:
-- Check the documentation files
-- Review the code comments for implementation details
-- Contact the development team
+- **Technical Issues**: Check the troubleshooting section above
+- **Usage Questions**: Refer to the step-by-step instructions
+- **Advanced Configuration**: See DOCUMENTATION.md for technical details
 
 ---
 
-**Built with dedication for Akademia's Computer Science Program**
-
-*Last updated: 2025 - Codebase optimized and cleaned*
+**Ready to start managing your student project competition! 🚀**

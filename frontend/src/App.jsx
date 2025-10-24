@@ -404,11 +404,11 @@ const Login = () => {
               
               {/* Test Account Info */}
               <div className="mt-6 p-4 bg-akademia-light border-2 border-akademia-secondary rounded-xl">
-                <h3 className="text-base font-bold text-akademia-primary mb-2">Dummy Admin:</h3>
+                <h3 className="text-base font-bold text-akademia-primary mb-2">Toets Admin:</h3>
                 <div className="text-sm text-akademia-secondary font-medium">
-                  <strong>Test Account:</strong><br/>
-                  Username: admin<br/>
-                  Password: admin123
+                  <strong>Toets Rekening:</strong><br/>
+                  Gebruikersnaam: admin<br/>
+                  Wagwoord: admin123
                 </div>
               </div>
             </div>
@@ -451,6 +451,8 @@ const Dashboard = () => {
     name: '',
     description: '',
     maxScore: 100,
+    weight: 0,
+    markingGuide: ''
   });
   
   // Password visibility states
@@ -980,13 +982,22 @@ const Dashboard = () => {
   // Criteria management functions
   const handleCreateCriteria = async () => {
     try {
-      await api.createCriteria(newCriteria);
+      console.log('Creating criteria with data:', newCriteria);
+      const result = await api.createCriteria(newCriteria);
+      console.log('Criteria creation result:', result);
       toast.success('Criteria created successfully!');
       setShowCreateCriteriaModal(false);
       setNewCriteria({ name: '', description: '', maxScore: 100, weight: 0, markingGuide: '' });
       loadData(); // Refresh data
+      
+      // Also refresh criteria list specifically for rounds page
+      if (currentView === 'rounds') {
+        const updatedCriteria = await api.getCriteria();
+        setCriteria(updatedCriteria);
+      }
     } catch (error) {
       console.error('Error creating criteria:', error);
+      console.error('Error response:', error.response?.data);
       toast.error('Failed to create criteria');
     }
   };
@@ -1067,7 +1078,7 @@ const Dashboard = () => {
                 onClick={handleLogout}
                 className="bg-akademia-primary hover:bg-akademia-secondary text-white px-4 py-2 rounded-lg text-base font-medium font-medium transition-colors"
               >
-                Logout
+                Uitlog
               </button>
             </div>
           </div>
@@ -1082,7 +1093,7 @@ const Dashboard = () => {
         {loading && (
           <div className="text-center py-8">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-akademia-primary"></div>
-            <p className="mt-2 text-gray-600">Loading data...</p>
+            <p className="mt-2 text-gray-600">Laai data...</p>
           </div>
         )}
 
@@ -2183,7 +2194,7 @@ const Dashboard = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">Edit Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900">Wysig Span</h3>
                 <button
                   onClick={() => {
                     setShowEditModal(false);
@@ -2197,18 +2208,18 @@ const Dashboard = () => {
               
               <form onSubmit={handleUpdateTeam} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Team Name</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Span Naam</label>
                   <input 
                     type="text" 
                     name="teamName"
                     defaultValue={editingTeam.teamName}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-akademia-primary focus:border-akademia-primary transition-all duration-300"
-                    placeholder="Enter team name"
+                    placeholder="Voer span naam in"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Team Number</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Span Nommer</label>
                   <input 
                     type="number" 
                     name="teamNumber"
@@ -2216,7 +2227,7 @@ const Dashboard = () => {
                     min="1"
                     max="15"
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-akademia-primary focus:border-akademia-primary transition-all duration-300"
-                    placeholder="Enter team number"
+                    placeholder="Voer span nommer in"
                     required
                   />
                 </div>
@@ -2590,6 +2601,8 @@ const JudgeDashboard = () => {
     name: '',
     description: '',
     maxScore: 100,
+    weight: 0,
+    markingGuide: ''
   });
 
   useEffect(() => {
@@ -2740,7 +2753,7 @@ const JudgeDashboard = () => {
                 onClick={handleLogout}
                 className="bg-akademia-primary hover:bg-akademia-secondary text-white px-4 py-2 rounded-lg text-base font-medium transition-colors"
               >
-                Logout
+                Uitlog
               </button>
             </div>
           </div>
@@ -3009,7 +3022,7 @@ const JudgeDashboard = () => {
                             <p className="text-gray-600">Team #{team.team.teamNumber}</p>
                             {team.team.members && team.team.members.length > 0 && (
                               <p className="text-sm text-gray-500">
-                                Members: {team.team.members.join(', ')}
+                                Members: {team.team.members.map(member => member.name).join(', ')}
                               </p>
                             )}
                           </div>
