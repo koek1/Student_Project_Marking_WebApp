@@ -428,10 +428,5 @@ This application demonstrates:
 
 The application is ready for immediate use and can be easily deployed in any environment with Docker support.
 
-## Support
-
-For technical support or questions about this application, please contact the development team or refer to the troubleshooting section above.
-
 ---
 
-**Built for Student Project Management**
