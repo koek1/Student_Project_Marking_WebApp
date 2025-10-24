@@ -242,46 +242,46 @@ This application follows **REST (Representational State Transfer)** architecture
 
 This application fully complies with all specified functional requirements:
 
-### ✅ Authentication System
+###  Authentication System
 - **Admin Login**: Admins can log in and access full system management
 - **Judge Login**: Judges can log in and access assigned teams only
 - **Role-based Access**: Clear separation between admin and judge functionalities
 
-### ✅ Team Management (CRUD)
+###  Team Management (CRUD)
 - **Create**: Admins can create teams with members and project details
 - **Read**: View all teams with filtering and pagination
 - **Update**: Modify team information, members, and project details
 - **Delete**: Remove teams from the system
 - **Judge Assignment**: Assign up to 3 judges per team with auto-assignment capability
 
-### ✅ Criteria Management (CRUD)
+###  Criteria Management (CRUD)
 - **Create**: Define marking criteria with descriptions and maximum scores
 - **Read**: View all criteria with usage statistics
 - **Update**: Modify criteria details and marking guides
 - **Delete**: Remove unused criteria (with validation)
 - **Marking Guides**: Each criteria includes detailed marking guidelines for judges
 
-### ✅ Round Management
+###  Round Management
 - **Create Rounds**: Set up evaluation rounds with specific criteria
 - **Close/Reopen**: Control round status for scoring
 - **Criteria Selection**: Choose which criteria apply to each round
 - **Future Scalability**: System supports up to 15 teams as required
 
-### ✅ Scoring System
+###  Scoring System
 - **Judge Scoring**: Judges can score only assigned teams
 - **Score Modification**: Judges can update scores before round closure
 - **Round-based Scoring**: Each round has specific criteria
 - **Leaderboard**: Automatic calculation and ranking of teams
 - **Score Validation**: Ensures scores don't exceed criteria maximums
 
-### ✅ Winner Display
+###  Winner Display
 - **Automatic Calculation**: System calculates winners based on scores
 - **Round Closure**: Winners displayed after at least one round is closed
 - **Ranking System**: Clear team rankings with scores and percentages
 
 ## Non-Functional Requirements Compliance
 
-### ✅ RESTful Architecture
+###  RESTful Architecture
 The Express.js backend **fully follows REST architecture** as required:
 - **Resource-based URLs**: All endpoints use proper REST conventions
 - **HTTP Methods**: Correct use of GET, POST, PUT, DELETE
@@ -289,7 +289,7 @@ The Express.js backend **fully follows REST architecture** as required:
 - **Stateless**: Each request is independent and self-contained
 - **Uniform Interface**: Consistent JSON response format across all endpoints
 
-### ✅ Akademia Color Scheme
+###  Akademia Color Scheme
 The React.js frontend **implements the complete Akademia color scheme**:
 - **Primary Color**: `rgb(15, 30, 59)` - Deep blue
 - **Secondary Color**: `rgb(147, 95, 40)` - Warm brown/gold
@@ -297,20 +297,20 @@ The React.js frontend **implements the complete Akademia color scheme**:
 - **Component Styling**: All UI components use Akademia colors
 - **Gradient Effects**: Beautiful gradients using Akademia color palette
 
-### ✅ Text Readability
+###  Text Readability
 - **High Contrast**: Dark text on light backgrounds
 - **Proper Typography**: Inter font family with appropriate weights
 - **Responsive Text**: Scalable text sizes for different screen sizes
 - **Clear Hierarchy**: Proper heading structure and text organization
 
-### ✅ User-Friendly Interface
+###  User-Friendly Interface
 - **Intuitive Navigation**: Clear menu structure and user flows
 - **Role-based UI**: Different interfaces for admins and judges
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Loading States**: Visual feedback during operations
 - **Error Handling**: Clear error messages and validation
 
-### ✅ Access Control
+###  Access Control
 - **Authentication Required**: All backend functions require user authentication
 - **Role-based Authorization**: 
   - Admins: Full system access
@@ -318,7 +318,7 @@ The React.js frontend **implements the complete Akademia color scheme**:
 - **Route Protection**: Middleware ensures proper access control
 - **Session Management**: JWT-based authentication with expiration
 
-### ✅ Docker Implementation
+###  Docker Implementation
 - **Docker Compose**: Complete `docker-compose.yml` configuration
 - **Multi-container Setup**: Separate containers for frontend, backend, and database
 - **Health Checks**: Built-in health monitoring for all services
@@ -327,7 +327,7 @@ The React.js frontend **implements the complete Akademia color scheme**:
 
 ## Specific Guidelines Compliance
 
-### ✅ Admin Functionality
+###  Admin Functionality
 - **Team Management**: Full CRUD operations for teams and team members
 - **Criteria Management**: Create, update, and manage marking criteria with guides
 - **Round Management**: Create rounds, assign criteria, close/reopen rounds
@@ -335,26 +335,26 @@ The React.js frontend **implements the complete Akademia color scheme**:
 - **User Management**: Create, update, and manage user accounts
 - **Statistics**: View comprehensive system statistics and reports
 
-### ✅ Judge Functionality  
+###  Judge Functionality  
 - **Assigned Teams Only**: Judges can only see and score teams assigned to them
 - **Scoring Interface**: Easy-to-use scoring interface with criteria details
 - **Score Modification**: Judges can update scores before round closure
 - **Marking Guides**: Access to detailed marking guidelines for each criteria
 - **Score History**: View previous scores and modifications
 
-### ✅ System Scalability
+###  System Scalability
 - **15 Team Support**: System designed to handle up to 15 teams as required
 - **Flexible Judge Assignment**: Automatic and manual judge assignment options
 - **Round-based Evaluation**: Multiple evaluation rounds with different criteria
 - **Future-proof Design**: Architecture supports expansion and modifications
 
-### ✅ Data Integrity
+###  Data Integrity
 - **Score Validation**: Scores cannot exceed criteria maximums
 - **Round Status Control**: Scores can only be submitted when rounds are open
 - **Judge Authorization**: Judges can only score assigned teams
 - **Admin Controls**: Admins can close/reopen rounds to control scoring periods
 
-### ✅ User Experience
+###  User Experience
 - **Role-based Interface**: Different interfaces for admins and judges
 - **Responsive Design**: Works on all device sizes
 - **Clear Navigation**: Intuitive menu structure and user flows
@@ -403,19 +403,11 @@ docker exec student_marking_db mongodump --out /backup
 docker exec student_marking_db mongorestore /backup
 ```
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
 ## License
 
 This project is developed for educational purposes as part of a student project marking system.
 
-## For Lecturers
+## For Lecturers / Potential Employers
 
 This application demonstrates:
 - **Full-stack development** with modern technologies
