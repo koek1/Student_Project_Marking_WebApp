@@ -18,7 +18,7 @@ const authenticate = async (req, res, next) => {
         const token = authHeader.substring(7);
 
         if (!token) {
-            return res.status(401),json({
+            return res.status(401).json({
                 success: false,
                 message: 'Unauthorized: Invalid token format'
             });
@@ -68,7 +68,7 @@ const authorize = (...roles) => {
         }
 
         if (!roles.includes(req.user.role)) {
-            return res.status(403),json({
+            return res.status(403).json({
                 success: false,
                 message: `Access denied: Required Role: ${roles.join(' or ')}`
             });

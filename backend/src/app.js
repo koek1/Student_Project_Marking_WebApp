@@ -1,3 +1,6 @@
+// Load environment variables
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -15,6 +18,7 @@ const scoreRoutes = require('./routes/scores');
 
 // Import middleware:
 const { errorHandler } = require('./middleware/errorHandler');
+const connectDB = require('./config/database');
 
 const app = express();
 
@@ -25,7 +29,7 @@ app.use(mongoSanitize());    // Prevent NoSQL injection attacks
 // Rate Limiting - Prevent DDoS attacks (basic attacks):
 const limiter = rateLimit({
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000, // 15 Minutes
-    max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100, // Limit each IP to 100 requests per windowMs
+    max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 1000, // Limit each IP to 1000 requests per windowMs (increased for development)
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
@@ -37,7 +41,7 @@ app.use(compression());
 
 // CORS configuration - allows frontend to communicate with the backend:
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL || ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
     credentials: true,
 }));
 
@@ -46,14 +50,7 @@ app.use(express.json({ limit: '10mb' }));    //Parse JSON bodies up to 10MB
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));    //Parse URL-encoded bodies up to 10MB 
 
 //Database connection:
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/student-project-marking', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    console.log('Connected to MongoDB');
-}).catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
-});
+connectDB();
 
 // Health check endpoint:
 app.get('/health', (req, res) => {
@@ -66,10 +63,10 @@ app.get('/health', (req, res) => {
 
 // API routes:
 app.use('/api/auth', authRoutes);
-app.use('api/teams', teamRoutes);
-app.use('api/criteria', criteriaRoutes);
-app.use('api/rounds', roundRoutes);
-app.use('api/scores', scoreRoutes);
+app.use('/api/teams', teamRoutes);
+app.use('/api/criteria', criteriaRoutes);
+app.use('/api/rounds', roundRoutes);
+app.use('/api/scores', scoreRoutes);
 
 // 404 handler for undefined routes:
 app.use('*', (req, res) => {
@@ -82,7 +79,7 @@ app.use('*', (req, res) => {
 // Global error handler:
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

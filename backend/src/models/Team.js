@@ -84,13 +84,7 @@ const teamSchema = new mongoose.Schema({
     // Assignment to judges:
     assignedJudges: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        validate: {
-            validator: function(judges) {
-                return judges.length <= 3;    // Max 3 judges per team
-            },
-            message: 'Team cannot be assigned to more than 3 judges'
-        }
+        ref: 'User'
     }],
 
     // Team performance tracking:
@@ -125,6 +119,16 @@ teamSchema.index({isParticipating: 1 });
 teamSchema.index({ assignedJudges: 1 });
 teamSchema.index({ totalScore: 1 });
 
+// Schema-level validation for assignedJudges array length
+teamSchema.pre('save', function(next) {
+    if (this.assignedJudges && this.assignedJudges.length > 3) {
+        const error = new Error('Team cannot be assigned to more than 3 judges');
+        error.name = 'ValidationError';
+        return next(error);
+    }
+    next();
+});
+
 // Virtual field to get the team leader:
 teamSchema.virtual('teamLeader').get(function() {
     return this.members.find(member => member.role === 'leader') || this.members[0];
@@ -136,20 +140,49 @@ teamSchema.virtual('memberCount').get(function() {
 });
 
 
-// Instance method to add judges to the team:
-teamSchema.methods.assignJudges = function(judgeId) {
-    if (!this.assignedJudges.includes(judgeId)) {
+// Instance method to add a judge to the team:
+teamSchema.methods.assignJudge = function(judgeId) {
+    console.log('=== TEAM MODEL assignJudge START ===');
+    console.log('Current assignedJudges:', this.assignedJudges);
+    console.log('JudgeId to assign:', judgeId);
+    console.log('JudgeId type:', typeof judgeId);
+    
+    // Check if judge is already assigned using ObjectId comparison
+    const isAlreadyAssigned = this.assignedJudges.some(id => id.toString() === judgeId.toString());
+    console.log('Is already assigned:', isAlreadyAssigned);
+    
+    if (!isAlreadyAssigned) {
+        // Check if we're at the maximum limit
+        if (this.assignedJudges.length >= 3) {
+            console.log('Team already has maximum judges (3)');
+            throw new Error('Team cannot have more than 3 judges assigned');
+        }
+        
+        console.log('Adding judge to assignedJudges array');
         this.assignedJudges.push(judgeId);
+        console.log('New assignedJudges:', this.assignedJudges);
+    } else {
+        console.log('Judge already assigned, skipping');
     }
-    return this.save();
+    
+    console.log('Saving team...');
+    return this.save().then(savedTeam => {
+        console.log('Team saved successfully');
+        console.log('Final assignedJudges:', savedTeam.assignedJudges);
+        console.log('=== TEAM MODEL assignJudge END ===');
+        return savedTeam;
+    }).catch(saveError => {
+        console.error('Error saving team:', saveError);
+        console.log('=== TEAM MODEL assignJudge ERROR ===');
+        throw saveError;
+    });
 };
 
-// Instance method to remove a judge from the team scores:
-teamSchema.methods.updateScore = function(judgeId) {
-    this.assignedJudges = this.assignedJudges.filtyer(id => !id.equals(judgeId));
+// Instance method to remove a judge from the team:
+teamSchema.methods.unassignJudge = function(judgeId) {
+    this.assignedJudges = this.assignedJudges.filter(id => id.toString() !== judgeId.toString());
     return this.save();
 };
-
 
 // Instance method to update team scores:
 teamSchema.methods.updateScore = async function(newScore) {
@@ -160,11 +193,28 @@ teamSchema.methods.updateScore = async function(newScore) {
 
 
 // Static method to get the teams assigned to specific judge:
-teamSchema.statics.getTeamsForJudge = function(judgeId) {
-    return this.find({
-        assignedJudges: judgeId,
-        isParticipating: true
-    }).populate('assignedJudges', 'username email');
+teamSchema.statics.getTeamsForJudge = async function(judgeId) {
+    console.log('=== TEAM MODEL getTeamsForJudge ===');
+    console.log('Looking for teams assigned to judge:', judgeId);
+    
+    try {
+        const teams = await this.find({
+            assignedJudges: judgeId,
+            isParticipating: true
+        }).populate('assignedJudges', 'username email');
+        
+        console.log('Found teams in model:', teams.length);
+        console.log('Teams details:', teams.map(t => ({ 
+            id: t._id, 
+            name: t.teamName, 
+            assignedJudges: t.assignedJudges.map(j => j._id || j) 
+        })));
+        
+        return teams;
+    } catch (error) {
+        console.error('Error in getTeamsForJudge static method:', error);
+        throw error;
+    }
 };
 
 

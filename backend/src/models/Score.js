@@ -79,19 +79,24 @@ scoreSchema.index({ judge: 1, round: 1 });
 scoreSchema.index({ isSubmitted: 1 });
 
 //Pre-save middleware to handle score updates
-scoreSchema.pre('save', function(next) {
-  // If this is an update and score has changed, track the previous score
-  if (this.isModified('score') && !this.isNew) {
-    this.previousScore = this.constructor.findById(this._id).select('score').then(doc => doc?.score);
-    this.version += 1;
+scoreSchema.pre('save', async function(next) {
+  try {
+    // If this is an update and score has changed, track the previous score
+    if (this.isModified('score') && !this.isNew) {
+      const existingDoc = await this.constructor.findById(this._id).select('score');
+      this.previousScore = existingDoc?.score || null;
+      this.version += 1;
+    }
+    
+    // Set submitted timestamp when score is submitted
+    if (this.isModified('isSubmitted') && this.isSubmitted && !this.submittedAt) {
+      this.submittedAt = new Date();
+    }
+    
+    next();
+  } catch (error) {
+    next(error);
   }
-  
-  // Set submitted timestamp when score is submitted
-  if (this.isModified('isSubmitted') && this.isSubmitted && !this.submittedAt) {
-    this.submittedAt = new Date();
-  }
-  
-  next();
 });
 
 

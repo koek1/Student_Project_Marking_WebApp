@@ -32,9 +32,8 @@ const validateUserRegistration = [
         .withMessage('Username may only contain letters, numbers, and underscores'),
 
     body('email')
+        .optional()
         .trim()
-        .notEmpty()
-        .withMessage('Email is required')
         .isEmail()
         .normalizeEmail()
         .withMessage('Please provide a valid email address'),
@@ -66,6 +65,37 @@ const validateUserRegistration = [
     handleValidationErrors
 ];
 
+// Validation rules for user login:
+const validateUserLogin = [
+    body('username')
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage('Username is required if provided'),
+    
+    body('email')
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage('Email is required if provided')
+        .isEmail()
+        .normalizeEmail()
+        .withMessage('Please provide a valid email address'),
+    
+    body('password')
+        .notEmpty()
+        .withMessage('Password is required'),
+    
+    // Custom validation to ensure either username or email is provided
+    body().custom((value) => {
+        if (!value.username && !value.email) {
+            throw new Error('Either username or email is required');
+        }
+        return true;
+    }),
+    
+    handleValidationErrors
+];
 
 // Validation rules for team creation:
 const validateTeamCreation = [
@@ -120,15 +150,6 @@ const validateTeamCreation = [
     body('maxScore')
       .isInt({ min: 1, max: 100 })
       .withMessage('Maximum score must be between 1 and 100'),
-    
-    body('weight')
-      .isFloat({ min: 0, max: 1 })
-      .withMessage('Weight must be between 0 and 1'),
-    
-    body('markingGuide')
-      .trim()
-      .isLength({ min: 20, max: 2000 })
-      .withMessage('Marking guide must be between 20 and 2000 characters'),
     
     handleValidationErrors
   ];

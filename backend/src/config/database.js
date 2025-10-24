@@ -5,12 +5,9 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
             maxPoolSize: 10,    // Maintain up to 10 socket connections
             serverSelectionTimeoutMS: 5000,     // Timeout after 5 seconds
             socketTimeoutMS: 45000,    //Close the connection after 45 seconds of inactivity
-            bufferMaxEntries: 0,    // Disable mongoose buffering
             bufferCommands: false,
         });
 

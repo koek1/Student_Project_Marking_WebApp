@@ -11,13 +11,14 @@ const userSchema = new mongoose.Schema({
         trim: true,
         minLength: [3, 'Username must contain at least 3 characters'],
         maxLength: [30, 'Username cannot be longer than 30 characters'],
-        match: [/^a-zA-Z0-9_]+/, 'Username may only contain letters, numbers, and underscores']
+        match: [/^[a-zA-Z0-9_]+$/, 'Username may only contain letters, numbers, and underscores']
     },
 
     email: {
         type: String,
-        required: [true, 'Email is required'],
-        unique: true,
+        required: false,
+        unique: false, // Remove unique constraint
+        sparse: true, // Allows multiple null values
         lowercase: true,
         trim: true,
         match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
@@ -86,7 +87,7 @@ const userSchema = new mongoose.Schema({
 
 // Index for better query performance:
 userSchema.index({ email: 1 });
-userSchema.indes({ role: 1 });
+userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
 
 // Virtual field to get the user's full name:
@@ -117,6 +118,12 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// Instance method to update last login:
+userSchema.methods.updateLastLogin = async function() {
+    this.lastLogin = new Date();
+    await this.save();
+};
+
 // Instance method to return JWT token:
 userSchema.methods.getSignedJwtToken = function() {
     return jwt.sign(
@@ -135,6 +142,11 @@ userSchema.methods.getSignedJwtToken = function() {
 // Static method to find user by email and include password:
 userSchema.statics.findByEmailForAuth = function(email) {
     return this.findOne({email, isActive: true}).select('+password');
+};
+
+// Static method to find user by username and include password:
+userSchema.statics.findByUsernameForAuth = function(username) {
+    return this.findOne({username, isActive: true}).select('+password');
 };
 
 // Instance method to update last login timestamp:

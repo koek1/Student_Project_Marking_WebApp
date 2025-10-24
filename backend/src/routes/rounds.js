@@ -10,30 +10,21 @@ const router = express.Router();
 // POST /api/rounds - Create new round (admin only)
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, description, criteria, startDate, endDate } = req.body;
+    const { name, description, criteria = [] } = req.body;
     
-    // Validate criteria exist and are active
-    const criteriaDocs = await Criteria.find({ 
-      _id: { $in: criteria }, 
-      isActive: true 
-    });
-    
-    if (criteriaDocs.length !== criteria.length) {
-      return res.status(400).json({
-        success: false,
-        message: 'One or more criteria are invalid or inactive'
+    // Validate criteria exist and are active (only if criteria are provided)
+    if (criteria && criteria.length > 0) {
+      const criteriaDocs = await Criteria.find({ 
+        _id: { $in: criteria }, 
+        isActive: true 
       });
-    }
-    
-    // Validate date range
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    
-    if (end <= start) {
-      return res.status(400).json({
-        success: false,
-        message: 'End date must be after start date'
-      });
+      
+      if (criteriaDocs.length !== criteria.length) {
+        return res.status(400).json({
+          success: false,
+          message: 'One or more criteria are invalid or inactive'
+        });
+      }
     }
     
     // Create round
@@ -41,15 +32,19 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
       name,
       description,
       criteria,
-      startDate: start,
-      endDate: end,
       createdBy: req.user._id
     });
     
-    // Increment usage count for criteria
-    await Promise.all(
-      criteriaDocs.map(criteriaDoc => criteriaDoc.incrementUsage())
-    );
+    // Increment usage count for criteria (only if criteria exist)
+    if (criteria && criteria.length > 0) {
+      const criteriaDocs = await Criteria.find({ 
+        _id: { $in: criteria }, 
+        isActive: true 
+      });
+      await Promise.all(
+        criteriaDocs.map(criteriaDoc => criteriaDoc.incrementUsage())
+      );
+    }
     
     // Populate criteria details
     const populatedRound = await Round.findById(round._id)

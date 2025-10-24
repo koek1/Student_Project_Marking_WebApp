@@ -13,9 +13,8 @@
 9. [Error Handling](#error-handling)
 10. [Performance Optimizations](#performance-optimizations)
 11. [Testing Strategy](#testing-strategy)
-12. [Deployment Architecture](#deployment-architecture)
-13. [API Documentation](#api-documentation)
-14. [Code Quality & Standards](#code-quality--standards)
+12. [API Documentation](#api-documentation)
+13. [Code Quality & Standards](#code-quality--standards)
 
 ---
 
@@ -1129,88 +1128,6 @@ test('should create team successfully', async () => {
 
 ---
 
-## 🐳 Deployment Architecture
-
-### Docker Configuration
-
-#### Backend Dockerfile
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY . .
-
-EXPOSE 5000
-
-CMD ["npm", "start"]
-```
-
-#### Frontend Dockerfile
-```dockerfile
-FROM node:18-alpine as build
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-#### Docker Compose
-```yaml
-version: '3.8'
-
-services:
-  mongodb:
-    image: mongo:5.0
-    container_name: student-marking-mongodb
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
-    volumes:
-      - mongodb_data:/data/db
-
-  backend:
-    build: ./backend
-    container_name: student-marking-backend
-    restart: unless-stopped
-    ports:
-      - "5000:5000"
-    environment:
-      MONGODB_URI: mongodb://admin:password@mongodb:27017/student-marking-app?authSource=admin
-      JWT_SECRET: your-jwt-secret
-      NODE_ENV: production
-    depends_on:
-      - mongodb
-
-  frontend:
-    build: ./frontend
-    container_name: student-marking-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-
-volumes:
-  mongodb_data:
-```
-
 ---
 
 ## 📚 API Documentation
@@ -1525,6 +1442,68 @@ const stats = await Team.aggregate([
 
 ---
 
+## Recent Codebase Optimization (2025)
+
+### Cleanup Summary
+The codebase has been optimized by removing unused files while preserving all core functionality:
+
+#### Files Removed (8 total):
+- **Admin Creation Scripts (5 files)**: One-time setup utilities no longer needed
+  - `backend/src/create-admin-direct.js`
+  - `backend/src/create-admin-no-hook.js`
+  - `backend/src/create-simple-admin.js`
+  - `backend/src/create-working-admin.js`
+  - `backend/src/reset-admin.js`
+
+- **Test/Utility Scripts (3 files)**: Development utilities
+  - `backend/src/check-admin.js`
+  - `backend/src/test-password.js`
+  - `test-backend.js`
+
+#### Benefits of Cleanup:
+- **Reduced Complexity**: Cleaner project structure
+- **Improved Maintainability**: Fewer files to manage
+- **Better Performance**: Smaller codebase for faster builds
+- **Enhanced Security**: Removed potential security risks from unused scripts
+- **Professional Appearance**: Production-ready codebase
+
+#### Preserved Functionality:
+- All core application features intact
+- Complete API functionality maintained
+- Frontend components and routing preserved
+- Database models and relationships unchanged
+- Authentication and authorization working
+- All documentation files kept
+
+### Current Project Structure
+```
+Student_Project_Marking_WebApp/
+├── backend/                 # Express.js backend
+│   ├── src/
+│   │   ├── models/         # Database models (User, Team, Criteria, Round, Score)
+│   │   ├── routes/         # API routes (auth, teams, criteria, rounds, scores)
+│   │   ├── middleware/     # Custom middleware (auth, errorHandler, validation)
+│   │   ├── config/         # Database configuration
+│   │   ├── app.js          # Main application
+│   │   └── server.js       # Server entry point
+├── frontend/               # React.js frontend
+│   ├── src/
+│   │   ├── App.jsx         # Main React application
+│   │   ├── index.jsx       # React entry point
+│   │   ├── styles/         # CSS styles
+│   │   └── images/         # Static assets
+│   ├── public/
+│   │   └── index.html      # HTML template
+│   ├── index.html          # Vite development template
+│   └── package.json
+├── package.json            # Root package.json
+├── DOCUMENTATION.md        # Technical documentation
+├── SETUP_GUIDE.md         # Setup instructions
+└── README.md              # Project overview
+```
+
+---
+
 ## Conclusion
 
 The **Student Project Marking WebApp** represents a comprehensive full-stack solution that demonstrates:
@@ -1548,7 +1527,6 @@ The **Student Project Marking WebApp** represents a comprehensive full-stack sol
 - **Documentation**: Comprehensive inline and external documentation
 - **Standards**: Consistent coding conventions
 - **Maintainability**: Modular, reusable components
-- **Deployment Ready**: Docker containerization and deployment guides
 
 This project showcases the skills and knowledge expected of a third-year Computer Science student, with production-ready code that could be deployed and used in a real academic environment.
 

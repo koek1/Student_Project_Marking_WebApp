@@ -26,21 +26,6 @@ const criteriaSchema = new mongoose.Schema({
         max: [100, 'Max score cannot exceed 100']
     },
 
-    weight: {
-        type: Number,
-        required: [true, 'Criteria weight is required'],
-        min: [0, 'Weight cannot be negative'],
-        max: [1, 'Weight cannot exceed one'],
-        default: 1.0
-    },
-
-    // Marking guide for judges:
-    markingGuide: {
-        type: String,
-        required: [true, 'Marking guide is required'],
-        trim: true,
-        maxLength: [2000, 'Marking guide cannot be longer than 200 characters]']
-    },
 
     // Criteria status:
     isActive: {
@@ -63,8 +48,8 @@ const criteriaSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true,
-    toJSON: ({ vitrual: true }),
-    toObject: ({ virtual: true })
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 

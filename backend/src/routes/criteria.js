@@ -9,7 +9,7 @@ const router = express.Router();
 // POST /api/criteria - Create new criteria (admin only) 
 router.post('/', authenticate, requireAdmin, validateCriteriaCreation, async (req, res) => {
   try {
-    const { name, description, maxScore, weight, markingGuide } = req.body;
+    const { name, description, maxScore } = req.body;
     
     // Check if criteria name already exists
     const existingCriteria = await Criteria.findOne({ name });
@@ -25,8 +25,6 @@ router.post('/', authenticate, requireAdmin, validateCriteriaCreation, async (re
       name,
       description,
       maxScore,
-      weight,
-      markingGuide,
       createdBy: req.user._id
     });
     

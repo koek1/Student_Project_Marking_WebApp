@@ -12,7 +12,10 @@ router.post('/register', authenticate, requireAdmin, validateUserRegistration, a
 
         //check if user already exists:
         const existingUser = await User.findOne({
-            $or: [{ email }, { username }]
+            $or: [
+                ...(email ? [{ email }] : []),
+                { username }
+            ]
         });
 
         if (existingUser) {
@@ -25,11 +28,15 @@ router.post('/register', authenticate, requireAdmin, validateUserRegistration, a
         // Create new User:
         const userData = {
             username,
-            email,
             password,
             role,
             createdBy: req.user._id
         };
+
+        // Add email only if provided:
+        if (email) {
+            userData.email = email;
+        }
 
         // Add judge-specific information if role is judge:
         if (role === 'judge' && judgeInfo) {
@@ -70,10 +77,20 @@ router.post('/register', authenticate, requireAdmin, validateUserRegistration, a
 // POST /api/auth/login:
 router.post('/login', validateUserLogin, async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email, username, password } = req.body;
       
-      // Find user by email and include password for verification
-      const user = await User.findByEmailForAuth(email);
+      // Find user by email or username and include password for verification
+      let user;
+      if (email) {
+        user = await User.findByEmailForAuth(email);
+      } else if (username) {
+        user = await User.findByUsernameForAuth(username);
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: 'Email or username is required'
+        });
+      }
       
       if (!user) {
         return res.status(401).json({
@@ -257,6 +274,68 @@ router.post('/login', validateUserLogin, async (req, res) => {
   });
 
 
+  // PUT /api/auth/users/:id - Update user (admin only):
+  router.put('/users/:id', authenticate, requireAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { username, email, role, judgeInfo } = req.body;
+      
+      // Check if user exists
+      const existingUser = await User.findById(id);
+      if (!existingUser) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+      
+      // Check if username or email already exists (excluding current user)
+      if (username || email) {
+        const conflictUser = await User.findOne({
+          _id: { $ne: id },
+          $or: [
+            ...(username ? [{ username }] : []),
+            ...(email ? [{ email }] : [])
+          ]
+        });
+        
+        if (conflictUser) {
+          return res.status(400).json({
+            success: false,
+            message: 'Username or email already exists'
+          });
+        }
+      }
+      
+      // Prepare update data
+      const updateData = {};
+      if (username) updateData.username = username;
+      if (email) updateData.email = email;
+      if (role) updateData.role = role;
+      if (judgeInfo) updateData.judgeInfo = judgeInfo;
+      
+      // Update user
+      const user = await User.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true, runValidators: true }
+      ).select('-password');
+      
+      res.json({
+        success: true,
+        message: 'User updated successfully',
+        data: { user }
+      });
+      
+    } catch (error) {
+      console.error('Update user error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error while updating user'
+      });
+    }
+  });
+
   // PUT /api/auth/users/:id/status - Toggle active status (admin only):
   router.put('/users/:id/status', authenticate, requireAdmin, async (req, res) => {
     try {
@@ -299,6 +378,45 @@ router.post('/login', validateUserLogin, async (req, res) => {
     }
   });
 
+
+  // DELETE /api/auth/users/:id - Delete user (admin only):
+  router.delete('/users/:id', authenticate, requireAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      // Check if user exists
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // Prevent deleting admin users
+      if (user.role === 'admin') {
+        return res.status(400).json({
+          success: false,
+          message: 'Cannot delete admin users'
+        });
+      }
+
+      // Delete user
+      await User.findByIdAndDelete(id);
+
+      res.json({
+        success: true,
+        message: 'User deleted successfully'
+      });
+
+    } catch (error) {
+      console.error('Delete user error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error while deleting user'
+      });
+    }
+  });
 
   // GET /api/auth/stats - Get user stats (admin only):
   router.get('/stats', authenticate, requireAdmin, async (req, res) => {

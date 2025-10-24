@@ -1,7 +1,7 @@
 const express = require('express');
 const Score = require('../models/Score');
 const Team = require('../models/Team');
-const Rounf = require('../models/Round');
+const Round = require('../models/Round');
 const Criteria = require('../models/Criteria');
 const { authenticate, requireAdmin, requireJudge } = require('../middleware/auth');
 const { validateScoreSubmission } = require('../middleware/validation');
@@ -113,7 +113,7 @@ router.post('/', authenticate, requireJudge, validateScoreSubmission, async (req
 
 
   // PUT /api/scores/:id - Update existing scores (judges only):
-  router.put(':/id', authenticate, requireJudge, validateScoreSubmission, async (req, res) => {
+  router.put('/:id', authenticate, requireJudge, validateScoreSubmission, async (req, res) => {
     try {
         const { id } = req.params;
         const { score, comments } = req.body;
@@ -177,7 +177,7 @@ router.post('/', authenticate, requireJudge, validateScoreSubmission, async (req
 
 
 // PUT /api/scores/:id/submit:
-router.put(':/id/submit', authenticate, requireJudge, async (req, res) => {
+router.put('/:id/submit', authenticate, requireJudge, async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -234,34 +234,33 @@ router.put(':/id/submit', authenticate, requireJudge, async (req, res) => {
 // GET /api/scores/my-scores:
 router.get('/my-scores', authenticate, requireJudge, async (req, res) => {
     try {
+      console.log('Fetching scores for judge:', req.user._id);
       const { roundId, page = 1, limit = 10 } = req.query;
-      
-      if (!roundId) {
-        return res.status(400).json({
-          success: false,
-          message: 'Round ID is required'
-        });
-      }
       
       // Calculate pagination
       const skip = (parseInt(page) - 1) * parseInt(limit);
       
-      // Get judge's scores for the round
-      const scores = await Score.find({ 
-        judge: req.user._id, 
-        round: roundId 
-      })
+      // Build query - include roundId if provided, otherwise get all scores
+      const query = { judge: req.user._id };
+      if (roundId) {
+        query.round = roundId;
+      }
+      
+      console.log('Score query:', query);
+      
+      // Get judge's scores
+      const scores = await Score.find(query)
       .populate('team', 'teamName teamNumber members')
       .populate('criteria', 'name maxScore weight markingGuide')
+      .populate('round', 'name description')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
       
+      console.log('Found scores:', scores.length);
+      
       // Get total count for pagination
-      const total = await Score.countDocuments({ 
-        judge: req.user._id, 
-        round: roundId 
-      });
+      const total = await Score.countDocuments(query);
       
       res.json({
         success: true,
@@ -278,6 +277,7 @@ router.get('/my-scores', authenticate, requireJudge, async (req, res) => {
       
     } catch (error) {
       console.error('Get my scores error:', error);
+      console.error('Error stack:', error.stack);
       res.status(500).json({
         success: false,
         message: 'Server error while fetching scores'
@@ -434,6 +434,116 @@ router.get('/my-scores', authenticate, requireJudge, async (req, res) => {
       res.status(500).json({
         success: false,
         message: 'Server error while fetching score statistics'
+      });
+    }
+  });
+
+  // GET /api/scores/leaderboard:
+  router.get('/leaderboard', authenticate, async (req, res) => {
+    try {
+      const { roundId } = req.query;
+      
+      // Build query - if roundId provided, get leaderboard for specific round
+      // Otherwise get overall leaderboard across all rounds
+      // Include both submitted and unsubmitted scores for now
+      const query = {};
+      if (roundId) {
+        query.round = roundId;
+      }
+      
+      // Get all submitted scores with populated data
+      const scores = await Score.find(query)
+        .populate('team', 'teamName teamNumber members')
+        .populate('round', 'name description')
+        .populate('criteria', 'name maxScore weight')
+        .sort({ createdAt: -1 });
+      
+      // Calculate team scores
+      const teamScores = {};
+      
+      scores.forEach(score => {
+        const teamId = score.team._id.toString();
+        const roundId = score.round._id.toString();
+        const criteriaId = score.criteria._id.toString();
+        
+        if (!teamScores[teamId]) {
+          teamScores[teamId] = {
+            team: score.team,
+            rounds: {},
+            totalScore: 0,
+            averageScore: 0,
+            totalPossibleScore: 0
+          };
+        }
+        
+        if (!teamScores[teamId].rounds[roundId]) {
+          teamScores[teamId].rounds[roundId] = {
+            round: score.round,
+            criteria: {},
+            roundScore: 0,
+            roundPossibleScore: 0
+          };
+        }
+        
+        // Store criteria score
+        teamScores[teamId].rounds[roundId].criteria[criteriaId] = {
+          criteria: score.criteria,
+          score: score.score,
+          maxScore: score.criteria.maxScore,
+          weight: score.criteria.weight || 1
+        };
+        
+        // Calculate weighted score for this criteria
+        const weightedScore = (score.score / score.criteria.maxScore) * (score.criteria.weight || 1);
+        teamScores[teamId].rounds[roundId].roundScore += weightedScore;
+        teamScores[teamId].rounds[roundId].roundPossibleScore += (score.criteria.weight || 1);
+      });
+      
+      // Calculate final scores for each team
+      const leaderboard = Object.values(teamScores).map(teamData => {
+        let totalScore = 0;
+        let totalPossibleScore = 0;
+        let roundCount = 0;
+        
+        Object.values(teamData.rounds).forEach(roundData => {
+          totalScore += roundData.roundScore;
+          totalPossibleScore += roundData.roundPossibleScore;
+          roundCount++;
+        });
+        
+        const averageScore = totalPossibleScore > 0 ? (totalScore / totalPossibleScore) * 100 : 0;
+        
+        return {
+          team: teamData.team,
+          totalScore: Math.round(totalScore * 100) / 100,
+          averageScore: Math.round(averageScore * 100) / 100,
+          roundCount,
+          rounds: teamData.rounds
+        };
+      });
+      
+      // Sort by average score (descending)
+      leaderboard.sort((a, b) => b.averageScore - a.averageScore);
+      
+      // Add ranking
+      leaderboard.forEach((team, index) => {
+        team.rank = index + 1;
+      });
+      
+      res.json({
+        success: true,
+        data: {
+          leaderboard,
+          totalTeams: leaderboard.length,
+          roundId: roundId || 'all'
+        }
+      });
+      
+    } catch (error) {
+      console.error('Get leaderboard error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error while fetching leaderboard'
       });
     }
   });

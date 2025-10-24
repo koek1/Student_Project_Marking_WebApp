@@ -35,17 +35,18 @@ const roundSchema = new mongoose.Schema({
     default: true
   },
   
-  // Time constraints
+  // Time constraints (optional)
   startDate: {
     type: Date,
-    required: [true, 'Start date is required']
+    required: false
   },
   
   endDate: {
     type: Date,
-    required: [true, 'End date is required'],
+    required: false,
     validate: {
       validator: function(endDate) {
+        if (!endDate || !this.startDate) return true;
         return endDate > this.startDate;
       },
       message: 'End date must be after start date'
@@ -92,6 +93,7 @@ roundSchema.virtual('completionPercentage').get(function() {
 
 // Virtual field to get total possible score
 roundSchema.virtual('totalPossibleScore').get(function() {
+  if (!this.criteria || !Array.isArray(this.criteria)) return 0;
   return this.criteria.reduce((total, criteria) => {
     return total + (criteria.maxScore || 0);
   }, 0);
