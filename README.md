@@ -2,7 +2,7 @@
 
 A comprehensive web application for managing student project competitions. This application allows administrators to manage teams, judges, rounds, and scoring criteria, while providing judges with an interface to score projects.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Docker (Download from: https://docs.docker.com/get-docker/)
@@ -29,13 +29,13 @@ node init-docker-admin.js
 - **Frontend**: http://localhost:3000
 - **Login**: admin / admin123
 
-## 🔐 Default Login Credentials
+## Default Login Credentials
 
 ### Admin Account
 - **Username**: `admin`
 - **Password**: `admin123`
 
-## 📱 How to Use the Application
+## How to Use the Application
 
 ### For Administrators
 
@@ -113,7 +113,7 @@ node init-docker-admin.js
 - **View team rankings** based on scores
 - **See team performance** across rounds
 
-## 🎯 Key Features
+## Key Features
 
 ### Admin Dashboard
 - **Team Management**: Create and manage student teams
@@ -129,7 +129,7 @@ node init-docker-admin.js
 - **History Tracking**: View scoring history
 - **Leaderboard**: See team rankings and performance
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### If the application won't start:
 ```bash
@@ -159,7 +159,7 @@ docker-compose up -d
 cd backend && node init-docker-admin.js
 ```
 
-## 📊 Application Workflow
+## Application Workflow
 
 1. **Admin creates teams** with project details
 2. **Admin adds judges** with credentials
@@ -169,7 +169,7 @@ cd backend && node init-docker-admin.js
 6. **Judges score teams** based on criteria
 7. **System calculates rankings** and displays leaderboard
 
-## 🎨 Interface Language
+## Interface Language
 
 The application interface is in **Afrikaans** with the following key terms:
 - **Spanne** = Teams
@@ -180,7 +180,7 @@ The application interface is in **Afrikaans** with the following key terms:
 - **Ranglys** = Leaderboard
 - **Punte** = Scores
 
-## 📞 Need Help?
+## Need Help?
 
 - **Technical Issues**: Check the troubleshooting section above
 - **Usage Questions**: Refer to the step-by-step instructions
@@ -188,4 +188,4 @@ The application interface is in **Afrikaans** with the following key terms:
 
 ---
 
-**Ready to start managing your student project competition! 🚀**
+**Ready to start managing your student project competition!**

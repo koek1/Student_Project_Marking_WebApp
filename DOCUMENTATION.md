@@ -1,6 +1,6 @@
 # Student Project Marking WebApp - Technical Documentation
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: React 18, Vite, Tailwind CSS
 - **Backend**: Node.js, Express.js
@@ -9,7 +9,7 @@
 - **Authentication**: JWT (JSON Web Tokens)
 - **Styling**: Custom Akademia theme with responsive design
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before running this application, ensure you have the following installed:
 
@@ -17,7 +17,7 @@ Before running this application, ensure you have the following installed:
 - **Docker Compose** (version 2.0 or higher)
 - **Git** (for cloning the repository)
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 Student_Project_Marking_WebApp/
@@ -39,7 +39,7 @@ Student_Project_Marking_WebApp/
 └── README.md             # Usage instructions
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -59,7 +59,7 @@ The application uses the following environment variables (configured in `docker-
 - **MongoDB Password**: `password123`
 - **Authentication Database**: `admin`
 
-## 🐳 Docker Services
+## Docker Services
 
 ### MongoDB Service
 - **Image**: mongo:7.0
@@ -77,7 +77,7 @@ The application uses the following environment variables (configured in `docker-
 - **Web Server**: Nginx
 - **Dependencies**: Backend service
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -129,7 +129,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-## 📊 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/login` - User login
@@ -158,7 +158,7 @@ docker-compose down -v
 - `GET /api/scores` - Get scores
 - `GET /api/leaderboard` - Get team rankings
 
-## 🎨 Customization
+## Customization
 
 ### Styling
 The application uses a custom "Akademia" theme with:
@@ -172,7 +172,7 @@ The application uses a custom "Akademia" theme with:
 2. **Frontend**: Add components in `frontend/src/`
 3. **Database**: Create models in `backend/src/models/`
 
-## 📝 Development
+## Development
 
 ### Local Development Setup
 ```bash
@@ -199,7 +199,7 @@ docker exec student_marking_db mongodump --out /backup
 docker exec student_marking_db mongorestore /backup
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -207,11 +207,11 @@ docker exec student_marking_db mongorestore /backup
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is developed for educational purposes as part of a student project marking system.
 
-## 👨‍🏫 For Lecturers
+## For Lecturers
 
 This application demonstrates:
 - **Full-stack development** with modern technologies
@@ -224,10 +224,10 @@ This application demonstrates:
 
 The application is ready for immediate use and can be easily deployed in any environment with Docker support.
 
-## 📞 Support
+## Support
 
 For technical support or questions about this application, please contact the development team or refer to the troubleshooting section above.
 
 ---
 
-**Built with ❤️ for Student Project Management**
+**Built for Student Project Management**

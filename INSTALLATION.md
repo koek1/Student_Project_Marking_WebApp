@@ -1,4 +1,4 @@
-# 🚀 Quick Installation Guide
+# Quick Installation Guide
 
 ## Prerequisites
 - Docker (Download from: https://docs.docker.com/get-docker/)
@@ -64,5 +64,5 @@ docker-compose up -d
 cd backend && node init-docker-admin.js
 ```
 
-## That's it! 🎉
+## That's it!
 Your Student Project Marking WebApp should now be running at http://localhost:3000
